@@ -1,22 +1,32 @@
 TapNGo/
 ├── include/
-│  ├── Seat.h
-│  ├── Occupancy.h
-│  ├── Fare.h
-│  ├── Verification.h
-│  ├── Data.h
-│  ├── Database.h
-│  ├── Driver.h
-│  └── Departure.h
+│   ├── Seat.h
+│   ├── SeatManager.h
+│   ├── Payment.h
+│   ├── CardPayment.h
+│   ├── CardVerifier.h
+│   ├── Passenger.h
+│   ├── Transaction.h
+│   ├── TransactionQueue.h
+│   ├── DriverControl.h
+│   └── DepartureController.h
 ├── src/
 │   ├── seat/
-│   ├── occupancy/
+│   │   ├──Seat.cpp
+│   │   ├──SeatManager.cpp
 │   ├── fare/
+│   │   ├──Payment.cpp
 │   ├── verification/
-│   ├── data/
-│   ├── database/
-│   ├── driver/
-│   └── departure/
+│   │   ├──CardPayment.cpp
+│   │   ├──CardVerifier.cpp
+│   ├── passenger/
+│   │   ├──Passenger.cpp
+│   ├── transaction/
+│   │   ├──Transaction.cpp
+│   │   ├──TransactionQueue.cpp
+│   ├── control/
+│   │   ├──DepartureController.cpp
+│   │   ├──DriverControl.cpp
 │
 ├── tests/
 │   ├── test_seat.cpp
