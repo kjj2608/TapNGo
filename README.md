@@ -94,7 +94,7 @@ TapNGo/
 - **Karnika Jain – Team Lead:** Planned system architecture, OOP design, and seat management logic.
 - **Anirudh Bahuguna – Developer:** Planned card verification functionality and integration of fare verification with seat status updates.
 - **Aaditya Budakoti – Data Management and Testing:** Planned data management, seat-state validation, and test-case preparation.
-- **Aparajita Pant – Developer and Documentation:** Planned departure readiness logic, driver status panel, module integration, and project documentation.
+- **Aparajita Pant – Developer and Documentation:** Planned departure readiness logic, driver status panel, module integration.
 
 ## 9. Current Project Status
 
