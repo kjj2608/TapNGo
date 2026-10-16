@@ -1,35 +1,34 @@
-#ifndef TRANSACTION_H
-#define TRANSACTION_H
+#ifndef TAPNGO_TRANSACTION_H
+#define TAPNGO_TRANSACTION_H
 
 #include <string>
 
+enum class TransactionStatus {
+    Pending,
+    Successful,
+    Failed
+};
+
 class Transaction {
 private:
-    int transactionId;
-    int passengerId;
+    unsigned long long transactionId;
     int seatNumber;
+    std::string passengerId;
     double amount;
-    bool verified;
-    std::string timestamp;
+    std::string paymentMethod;
+    TransactionStatus status;
 
 public:
-    Transaction(
-        int transactionId,
-        int passengerId,
-        int seatNumber,
-        double amount
-    );
+    Transaction(unsigned long long id, int seat, const std::string& passenger,
+                double fare, const std::string& method);
 
-    int getTransactionId() const;
-    int getPassengerId() const;
+    unsigned long long getId() const;
     int getSeatNumber() const;
+    const std::string& getPassengerId() const;
     double getAmount() const;
-
-    bool isVerified() const;
-
-    void markVerified();
-
-    void display() const;
+    const std::string& getPaymentMethod() const;
+    TransactionStatus getStatus() const;
+    void setStatus(TransactionStatus newStatus);
 };
 
 #endif

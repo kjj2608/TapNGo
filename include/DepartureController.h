@@ -1,17 +1,16 @@
-#ifndef DEPARTURE_CONTROLLER_H
-#define DEPARTURE_CONTROLLER_H
+#ifndef TAPNGO_DEPARTURE_CONTROLLER_H
+#define TAPNGO_DEPARTURE_CONTROLLER_H
 
-#include "SeatManager.h"
+class SeatManager;
 
 class DepartureController {
 private:
-    SeatManager* seatManager;
+    const SeatManager& seatManager;
 
 public:
-    DepartureController(SeatManager* manager);
-
-    bool checkDeparture() const;
-    void displayDepartureStatus() const;
+    explicit DepartureController(const SeatManager& manager);
+    bool canDepart() const;
+    bool requestDeparture() const;
 };
 
 #endif

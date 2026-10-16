@@ -1,20 +1,16 @@
-#ifndef CARD_PAYMENT_H
-#define CARD_PAYMENT_H
+#ifndef TAPNGO_CARD_PAYMENT_H
+#define TAPNGO_CARD_PAYMENT_H
 
 #include "Payment.h"
-#include <string>
+#include "CardVerifier.h"
 
 class CardPayment : public Payment {
 private:
-    std::string cardId;
+    CardVerifier verifier;
 
 public:
-    CardPayment(double amount, const std::string& cardId);
-
-    bool processPayment() override;
-    bool verify() override;
-
-    std::string getCardId() const;
+    bool processPayment(double amount, const std::string& paymentToken) override;
+    std::string getMethodName() const override;
 };
 
 #endif

@@ -1,34 +1,33 @@
-#ifndef SEAT_H
-#define SEAT_H
+#ifndef TAPNGO_SEAT_H
+#define TAPNGO_SEAT_H
 
 #include <string>
 
 enum class SeatState {
-    EMPTY,
-    OCCUPIED_UNVERIFIED,
-    OCCUPIED_VERIFIED
+    Empty,
+    OccupiedUnverified,
+    OccupiedVerified
 };
 
 class Seat {
 private:
     int seatNumber;
     SeatState state;
-    int passengerId;
+    std::string passengerId;
 
 public:
-    Seat(int number);
+    explicit Seat(int number = 0);
 
     int getSeatNumber() const;
     SeatState getState() const;
-    int getPassengerId() const;
+    const std::string& getPassengerId() const;
 
-    void occupy(int passengerId);
-    void verify();
-    void release();
+    bool assignPassenger(const std::string& passengerId);
+    bool markVerified();
+    bool clear();
 
-    bool isEmpty() const;
-    bool isVerified() const;
-    std::string getStateString() const;
+    static std::string stateName(SeatState state);
+    static std::string stateColor(SeatState state);
 };
 
 #endif

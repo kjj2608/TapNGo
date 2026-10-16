@@ -1,18 +1,4 @@
-class Payment {
-    protected:
-        double amount;
+#include "Payment.h"
 
-    public:
-        Payment(double amount){
-            amount = amount;
-        }
-
-        virtual bool processPayment() = 0;
-        virtual bool verify() = 0;
-
-        double getAmount() {
-            return amount;
-        }
-
-        virtual ~Payment(){}
-};
+// Payment is an abstract interface; its virtual destructor is defined inline
+// in Payment.h so concrete payment methods can be safely deleted polymorphically.

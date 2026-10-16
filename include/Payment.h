@@ -1,19 +1,13 @@
-#ifndef PAYMENT_H
-#define PAYMENT_H
+#ifndef TAPNGO_PAYMENT_H
+#define TAPNGO_PAYMENT_H
+
+#include <string>
 
 class Payment {
-protected:
-    double amount;
-
 public:
-    Payment(double amount);
-
-    virtual bool processPayment() = 0;
-    virtual bool verify() = 0;
-
-    double getAmount() const;
-
     virtual ~Payment() = default;
+    virtual bool processPayment(double amount, const std::string& paymentToken) = 0;
+    virtual std::string getMethodName() const = 0;
 };
 
 #endif

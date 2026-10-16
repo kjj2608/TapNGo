@@ -1,7 +1,8 @@
-#ifndef TRANSACTION_QUEUE_H
-#define TRANSACTION_QUEUE_H
+#ifndef TAPNGO_TRANSACTION_QUEUE_H
+#define TAPNGO_TRANSACTION_QUEUE_H
 
 #include "Transaction.h"
+#include <cstddef>
 #include <queue>
 
 class TransactionQueue {
@@ -10,12 +11,9 @@ private:
 
 public:
     void enqueue(const Transaction& transaction);
-    Transaction dequeue();
-
+    bool dequeue(Transaction& transaction);
     bool isEmpty() const;
-    int size() const;
-
-    void displayQueue() const;
+    std::size_t size() const;
 };
 
 #endif

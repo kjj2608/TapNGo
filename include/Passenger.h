@@ -1,23 +1,19 @@
-#ifndef PASSENGER_H
-#define PASSENGER_H
+#ifndef TAPNGO_PASSENGER_H
+#define TAPNGO_PASSENGER_H
 
 #include <string>
 
 class Passenger {
 private:
-    int passengerId;
+    std::string passengerId;
     std::string name;
-    int seatNumber;
 
 public:
-    Passenger(int id, const std::string& name);
+    Passenger(const std::string& id = "", const std::string& passengerName = "");
 
-    int getPassengerId() const;
-    std::string getName() const;
-    int getSeatNumber() const;
-
-    void assignSeat(int seatNumber);
-    void removeSeat();
+    const std::string& getId() const;
+    const std::string& getName() const;
+    bool isValid() const;
 };
 
 #endif

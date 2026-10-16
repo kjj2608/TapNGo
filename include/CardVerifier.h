@@ -1,19 +1,13 @@
-#ifndef CARD_VERIFIER_H
-#define CARD_VERIFIER_H
+#ifndef TAPNGO_CARD_VERIFIER_H
+#define TAPNGO_CARD_VERIFIER_H
 
-#include "CardPayment.h"
+#include <string>
 
 class CardVerifier {
-private:
-    double standardFare;
-
 public:
-    CardVerifier(double fare);
-
-    bool verifyCard(CardPayment& payment);
-    bool verifyFare(double amount) const;
-
-    double getFare() const;
+    // Prototype-only validation; this is not real payment authorization.
+    bool isCardFormatValid(const std::string& cardId) const;
+    bool verifyCard(const std::string& cardId) const;
 };
 
 #endif

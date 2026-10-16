@@ -1,19 +1,15 @@
-#ifndef DRIVER_CONTROL_H
-#define DRIVER_CONTROL_H
+#ifndef TAPNGO_DRIVER_CONTROL_H
+#define TAPNGO_DRIVER_CONTROL_H
 
-#include "SeatManager.h"
+class SeatManager;
 
 class DriverControl {
 private:
-    SeatManager* seatManager;
+    const SeatManager& seatManager;
 
 public:
-    DriverControl(SeatManager* manager);
-
-    void displayStatus() const;
-    bool canBusDepart() const;
-
-    void showUnverifiedSeats() const;
+    explicit DriverControl(const SeatManager& manager);
+    void showDashboard() const;
 };
 
 #endif
