@@ -109,8 +109,10 @@ The project is currently in the planning and documentation stage. The system des
 - Testing with larger simulated passenger loads.
 
 ## Project Architecture
-TapNGo ensures that a bus cannot depart if any passenger is unpaid.  
+TapNGo ensures that a bus cannot depart if any passenger is unpaid.
+
 Detailed architecture is available in [Documentation/architecture.md](Documentation/architecture.md).
+
 
 ---
 
