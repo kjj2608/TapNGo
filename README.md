@@ -108,6 +108,10 @@ The project is currently in the planning and documentation stage. The system des
 - Improved driver dashboard and reporting features.
 - Testing with larger simulated passenger loads.
 
+## Project Architecture
+TapNGo ensures that a bus cannot depart if any passenger is unpaid.  
+Detailed architecture is available in [Documentation/architecture.md](Documentation/architecture.md).
+
 ---
 
 **Project:** TapNGo – A Bus Fare Verification and Payment System  
