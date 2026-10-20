@@ -8,6 +8,7 @@ DepartureController::DepartureController(const SeatManager& manager)
 
 // Checks if bus can depart (true if no unverified passengers)
 bool DepartureController::canDepart() const {
+    // Departure is allowed only when all occupied seats are verified.
     return !seatManager.hasUnverifiedPassengers();
 }
 
@@ -17,6 +18,7 @@ bool DepartureController::requestDeparture() const {
         std::cout << "Departure denied: at least one occupied seat is unverified.\n";
         return false;   // Not allowed
     }
+
     std::cout << "Departure check passed.\n";
     return true;        // Allowed
 }
