@@ -1,123 +1,100 @@
-#include "CardPayment.h"
-#include "DepartureController.h"
-#include "DriverControl.h"
-#include "Passenger.h"
-#include "SeatManager.h"
-#include "TransactionQueue.h"
-
-#include <iomanip>
 #include <iostream>
-#include <limits>
-#include <memory>
-#include <string>
+#include "Passenger.h"
+#include "Bus.h"
+#include "Payment.h"
 
 using namespace std;
 
-namespace {
-int readInt(const string& prompt) {
-    int value;
-    while (true) {
-        cout << prompt;
-        if ( cin >> value) {
-            cin.ignore( numeric_limits< streamsize>::max(), '\n');
-            return value;
-        }
-        cout << "Enter a valid whole number.\n";
-        cin.clear();
-        cin.ignore( numeric_limits< streamsize>::max(), '\n');
-    }
-}
-
- string readText(const  string& prompt) {
-    string value;
-    cout << prompt;
-    getline( cin, value);
-    return value;
-}
-}
+#define fare 20
 
 int main() {
-    cout << "=== TapNGo Bus Fare Verification Prototype ===\n";
-    int seatCount = readInt("Number of seats (1-100): ");
-    if (seatCount < 1 || seatCount > 100) seatCount = 20;
+    int seat_count;
+    cout << "Number of seats(1-100): ";
+    cin >> seat_count;
+    Bus bus(seat_count);
+    cout << "___\n";
+    Payment payment;
 
-    SeatManager seatManager(seatCount);
-    DriverControl driver(seatManager);
-    DepartureController departure(seatManager);
-    unique_ptr<Payment> payment =  make_unique<CardPayment>();
-    TransactionQueue transactions;
-    unsigned long long nextTransactionId = 1;
-    const double fare = 20.0;
+    int choice = 1;
+    while(choice) {
+        cout << "\n1. Occupy Seat\n2. Pay\n3. Release Seat\n4. Dashboard\n5. Check Departure\n6. Transaction\n0. Exit\nChoose: " ;
+        cin >> choice;
+        
+        switch (choice) {
+            case 1:{
+                int seat_no;
+                string id, name;
+                cout << "Seat number: ";
+                cin >> seat_no;
+                cout << "Passenger Id: ";
+                cin >> id;
+                cout << "Passenger Name: ";
+                cin >> name;
 
-    bool running = true;
-    while (running) {
-        cout << "\n1. Occupy seat\n"
-                  << "2. Pay/verify fare by card (demo)\n"
-                  << "3. Release seat\n"
-                  << "4. Driver dashboard\n"
-                  << "5. Check departure\n"
-                  << "6. Show queued transactions\n"
-                  << "0. Exit\n";
-        int choice = readInt("Choose: ");
-
-        if (choice == 1) {
-            int seat = readInt("Seat number: ");
-            string id = readText("Passenger ID: ");
-            string name = readText("Passenger name: ");
-            Passenger passenger(id, name);
-            if (seatManager.assignPassenger(seat, passenger))
-                cout << "Seat is now Occupied Unverified.\n";
-            else
-                cout << "Could not assign passenger. Check seat and passenger details.\n";
-        } else if (choice == 2) {
-            int seat = readInt("Seat number: ");
-            const Seat* selectedSeat = seatManager.getSeat(seat);
-            if (!selectedSeat || selectedSeat->getState() != SeatState::OccupiedUnverified) {
-                cout << "Choose a valid occupied, unverified seat first.\n";
-                continue;
+                Passenger passenger(id, name);
+                if(bus.assignPassenger(seat_no, passenger)){
+                    cout << "Seat is not Occupied Unverified.\n";
+                } else {
+                    cout << "Seat Allocation Failed, Check details and try again.\n";
+                }                
+                break;
             }
-            string token = readText("Demo card ID (4-24 characters): ");
-            Transaction transaction(nextTransactionId++, seat,
-                                    selectedSeat->getPassengerId(), fare,
-                                    payment->getMethodName());
-            bool paid = payment->processPayment(fare, token);
-            transaction.setStatus(paid ? TransactionStatus::Successful
-                                       : TransactionStatus::Failed);
-            transactions.enqueue(transaction);
-
-            if (paid && seatManager.markFareVerified(seat))
-                cout << "Demo payment accepted. Seat is now Occupied Verified.\n";
-            else
-                cout << "Demo payment failed; seat remains unverified.\n";
-            cout << "Demo fare: " <<  fixed <<  setprecision(2) << fare << '\n';
-        } else if (choice == 3) {
-            int seat = readInt("Seat number: ");
-            cout << (seatManager.releaseSeat(seat) ? "Seat released.\n"
-                                                        : "Could not release seat.\n");
-        } else if (choice == 4) {
-            driver.showDashboard();
-        } else if (choice == 5) {
-            departure.requestDeparture();
-        } else if (choice == 6) {
-            cout << "Queued transactions: " << transactions.size() << '\n';
-            Transaction transaction(0, 0, "", 0.0, "");
-            while (transactions.dequeue(transaction)) {
-                const char* status = transaction.getStatus() == TransactionStatus::Successful
-                    ? "SUCCESS" : (transaction.getStatus() == TransactionStatus::Failed
-                    ? "FAILED" : "PENDING");
-                cout << "ID " << transaction.getId()
-                          << " | Seat " << transaction.getSeatNumber()
-                          << " | Passenger " << transaction.getPassengerId()
-                          << " | Amount " << transaction.getAmount()
-                          << " | " << status << '\n';
+            case 2:{
+                int seat_no;
+                long int cardno;
+                cout << "Seat number: ";
+                cin >> seat_no;
+                if(bus.getStatus(seat_no) != 1){
+                    cout << "Enter a valid seat no (Unverified).\n";
+                    continue;
+                }
+                cout << "Card number: ";
+                cin >> cardno;
+                if(payment.isValidCard(cardno)) {
+                    bus.markVerified(seat_no);
+                    payment.addTransaction(seat_no, fare);
+                } else {
+                    cout << "Payment Failed. Invalid card!\n";
+                }
+                break;
             }
-        } else if (choice == 0) {
-            running = false;
-        } else {
-            cout << "Invalid option.\n";
+
+            case 3:{
+                int seat_no;
+                cout << "Seat number: ";
+                cin >> seat_no;
+                if (bus.releaseSeat(seat_no)){
+                    cout << "Seat released.\n";
+                }
+            }
+
+            case 4:{
+                bus.showDashboard();
+            }
+
+            case 5:{
+                if(bus.checkDeparture()){
+                    cout << "\033[32m\nNo Unverified Passengers.\nBus is ready to depart.\n\033[0m";
+                } else {
+                    cout << "\033[31m\nUnverified Passengers Remains.\n\033[0m";
+                }
+                break;
+            }
+
+            case 6:{
+                payment.displayTransaction();
+                break;
+            }
+
+            case 0:{
+                cout << "TAPnGO closed.\n" ;
+                return 0;
+            }
+            
+            default:
+                break;
         }
     }
 
-    cout << "TapNGo closed.\n";
     return 0;
 }
