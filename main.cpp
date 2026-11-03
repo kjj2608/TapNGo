@@ -5,8 +5,6 @@
 
 using namespace std;
 
-#define fare 20
-
 int main() {
     int seat_count;
     cout << "Number of seats(1-100): ";
@@ -17,7 +15,7 @@ int main() {
 
     int choice = 1;
     while(choice) {
-        cout << "\n1. Occupy Seat\n2. Pay\n3. Release Seat\n4. Dashboard\n5. Check Departure\n6. Transaction\n0. Exit\nChoose: " ;
+        cout << "\n1. Occupy Seat\n2. Pay\n3. Release Seat\n4. Dashboard\n5. Check Departure\n6. Transaction\n7. Show Stops\n0. Exit\nChoose: " ;
         cin >> choice;
         
         switch (choice) {
@@ -31,10 +29,21 @@ int main() {
                 cout << "Passenger Name: ";
                 cin >> name;
 
+                bus.showMap();
+                int start, stop;
+                cout << "Starting Stop: ";
+                cin >> start;
+                cout << "Ending Stop: ";
+                cin >> stop;
+
                 Passenger passenger(id, name);
-                if(bus.assignPassenger(seat_no, passenger)){
-                    cout << "Seat is not Occupied Unverified.\n";
+                if(bus.assignPassenger(seat_no, passenger) && start != stop){
+                    bus.setFare(seat_no, start, stop);
+                    cout << "Seat is now Occupied Unverified.\n";
                 } else {
+                    if(start == stop){
+                        cout << "start and stop can not be same!\n";
+                    }
                     cout << "Seat Allocation Failed, Check details and try again.\n";
                 }                
                 break;
@@ -52,6 +61,7 @@ int main() {
                 cin >> cardno;
                 if(payment.isValidCard(cardno)) {
                     bus.markVerified(seat_no);
+                    int fare = bus.getFare(seat_no);
                     payment.addTransaction(seat_no, fare);
                 } else {
                     cout << "Payment Failed. Invalid card!\n";
@@ -63,9 +73,11 @@ int main() {
                 int seat_no;
                 cout << "Seat number: ";
                 cin >> seat_no;
-                if (bus.releaseSeat(seat_no)){
+                if (bus.releaseSeat(seat_no, payment)){
                     cout << "Seat released.\n";
+                    payment.removeTransaction(seat_no);
                 }
+                break;
             }
 
             case 4:{
@@ -83,6 +95,11 @@ int main() {
 
             case 6:{
                 payment.displayTransaction();
+                break;
+            }
+
+            case 7:{
+                bus.showMap();
                 break;
             }
 

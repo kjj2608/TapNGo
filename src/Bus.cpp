@@ -1,4 +1,5 @@
 #include "Bus.h"
+#include "Payment.h"
 #include <iostream>
 #include <stdlib.h>
 
@@ -7,6 +8,10 @@ Bus::Bus(int sc){
     seats.resize(seatcount);
     for(int i = 0; i < seatcount; i++){
         seats[i] = 0;
+    }
+    fare.resize(seatcount);
+    for(int i = 0; i < seatcount; i++){
+        fare[i] = 0;
     }
 };
 
@@ -33,7 +38,7 @@ bool Bus::markVerified(int seatno){
     return false;
 }
 
-bool Bus::releaseSeat(int seatno){
+bool Bus::releaseSeat(int seatno, Payment& payment){
     seatno--;
     if(seats[seatno] != 0){
         seats[seatno] = 0;
@@ -51,6 +56,10 @@ bool Bus::isoccupied(int seatno){
 int Bus::getStatus(int seatno){
     seatno--;
     return (seats[seatno]);
+}
+
+void Bus::setFare(int seatno, int start, int stop){
+    fare[seatno] = fare_map[start][stop];
 }
 
 void Bus::showDashboard() {
@@ -86,4 +95,12 @@ bool Bus::checkDeparture(){
         }
     }
     return true;
+}
+
+void Bus::showMap(){
+    std::cout << "\n--ROUTE MAP--\n";
+    for(int i = 0; i < 12; i++) {
+        std::cout << i << ". " << locations[i] << std::endl;
+    }
+    return;
 }
