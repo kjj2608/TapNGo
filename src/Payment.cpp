@@ -23,6 +23,25 @@ void Payment::addTransaction(transaction **front, transaction **rear, int seatno
     }
 }
 
+void Payment::removeTransaction(transaction **front, transaction **rear, int seatno){
+    if((*front)->seatnumber == seatno){
+        (*front) = (*front)->next;
+    } else {
+        transaction *temp = NULL, *del = NULL;
+        temp = (transaction*) malloc(sizeof(transaction));
+        del = (transaction*) malloc(sizeof(transaction));
+        if(temp != NULL) {
+            temp = (*front);
+            while(temp->next->seatnumber != seatno){
+                temp = temp->next;
+            }
+            del = temp->next;
+            temp->next = temp->next->next;
+            free(del);
+        }
+    }
+}
+
 void Payment::displayTransaction(){
     std::cout << "Queued Transactions: " << count <<std::endl;
     transaction *temp = NULL;
