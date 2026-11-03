@@ -21,6 +21,11 @@ class Payment {
             addTransaction(&front, &rear, seatno, f);
         }
         void addTransaction(transaction **front, transaction **rear, int seatno, int f);
+        
+        void removeTransaction(int seatno){
+            removeTransaction(&front, &rear, seatno);
+        }
+        void removeTransaction(transaction **front, transaction **rear, int seatno);
         void displayTransaction();
 };
 
