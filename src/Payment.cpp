@@ -1,8 +1,16 @@
 #include "Payment.h"
 
-bool Payment:: isValidCard(long int card){
-    if(card > 999 and card <1000000000000000000000000);
+bool Payment::isValidCard(std::string card){
+    size_t length = card.size();
+    if(length > 3 && length < 25){
+        for(int i = 0; i < length; i++){
+            if(card[i] < '0' || card[i] > '9'){
+                return false;
+            }
+        }
         return true;
+    }
+    return false;
 }
 
 void Payment::addTransaction(transaction **front, transaction **rear, int seatno, int f){
