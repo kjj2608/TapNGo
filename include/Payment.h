@@ -16,7 +16,7 @@ class Payment {
         transaction *front = NULL, *rear = NULL;
         int count = 0;
     public:
-        bool isValidCard(long int cardno);
+        bool isValidCard(std::string cardno);
         void addTransaction(int seatno, int f){
             addTransaction(&front, &rear, seatno, f);
         }
