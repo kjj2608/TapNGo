@@ -1,7 +1,10 @@
 #include <iostream>
+#include <ctime>
+#include <fstream>
 #include "Passenger.h"
 #include "Bus.h"
 #include "Payment.h"
+#include "exception.h"
 
 using namespace std;
 
@@ -13,6 +16,21 @@ int main() {
     cout << "___\n";
     Payment payment;
 
+    ofstream records("records.txt", ios::app);
+    try{
+        if(records.is_open()){
+            time_t now = std::time(nullptr);
+            tm* localTime = std::localtime(&now);
+            char buffer[80];
+            strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", localTime);
+            records << "Trip Starting Time: " << buffer << '\n';
+        } else {
+            throw close_file_exception("Couldnt Open the Record file in Append mode");
+        }
+    }
+    catch(close_file_exception &e){
+        cout << "File Error! : " << e.what() << endl; 
+    }
     int choice = 1;
     while(choice){
         User_Selection:
@@ -64,12 +82,29 @@ int main() {
                                 cout << "Enter a valid seat no (Unverified).\n";
                                 continue;
                             }
+                            cin.ignore();
                             cout << "Card number: ";
-                            cin >> cardno;
+                            getline(cin, cardno);
+                            cout << "Checking card...\n";
                             if(payment.isValidCard(cardno)) {
+                                cout << "Card valid\n";
                                 bus.markVerified(seat_no);
+                                cout << "Seat verified\n";
                                 int fare = bus.getFare(seat_no);
+                                cout << "Fare obtained: " << fare << endl;
                                 payment.addTransaction(seat_no, fare);
+                                cout << "Transaction added\n";
+                                try{
+                                    if(records.is_open()){
+                                        records << "Seat " << seat_no << " | Amount " << fare << " | " << "Success" << endl;
+                                    } else {
+                                        throw close_file_exception("file is not opened");
+                                    }
+                                }
+                                catch(close_file_exception &e){
+                                    cout << "File Error! : " << e.what() << endl; 
+                                }
+                                cout << "Payment Successful : Rs " << fare << endl;
                             } else {
                                 cout << "Payment Failed. Invalid card!\n";
                             }
@@ -82,7 +117,9 @@ int main() {
                             cin >> seat_no;
                             if (bus.releaseSeat(seat_no, payment)){
                                 cout << "Seat released.\n";
-                                payment.removeTransaction(seat_no);
+                                if(bus.isPaid(seat_no)){
+                                    payment.removeTransaction(seat_no);
+                                }
                             }
                             break;
                         }
@@ -105,7 +142,7 @@ int main() {
             }
             case 2:{
                 while(choice) {
-                    cout << "\n1. Release Seat\n2. Dashboard\n3. Check Departure\n4. Transaction\n5. Show Stops\n0. Exit\nChoose: " ;
+                    cout << "\n1. Release Seat\n2. Dashboard\n3. Check Departure\n4. Transaction\n5. Show Stops\n0. Back\nChoose: " ;
                     cin >> choice;
                     
                     switch (choice) {
@@ -115,7 +152,9 @@ int main() {
                             cin >> seat_no;
                             if (bus.releaseSeat(seat_no, payment)){
                                 cout << "Seat released.\n";
-                                payment.removeTransaction(seat_no);
+                                if(bus.isPaid(seat_no)){
+                                    payment.removeTransaction(seat_no);
+                                }
                             }
                             break;
                         }
@@ -155,6 +194,20 @@ int main() {
                 break;
             }
             case 0:{
+                try{
+                    if(records.is_open()){
+                        time_t now = std::time(nullptr);
+                        tm* localTime = std::localtime(&now);
+                        char buffer[80];
+                        strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", localTime);
+                        records << "Trip Ending Time: " << buffer << "\n\n";
+                    } else {
+                        throw close_file_exception("Couldnt Open the Record file in Append mode");
+                    }
+                }
+                catch(close_file_exception &e){
+                    cout << "File Error! : " << e.what() << endl; 
+                }
                 cout << "TAPnGO closed.\n" ;
                 return 0;
             }    
