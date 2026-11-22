@@ -1,0 +1,30 @@
+Trip Starting Time: 2026-11-22 09:55:43
+Seat 3 | Amount 35 | Success
+Trip Starting Time: 2026-11-22 10:14:58
+Seat 3 | Amount 35 | Success
+Trip Starting Time: 2026-11-22 11:17:51
+Seat 2 | Amount 30 | Success
+Trip Starting Time: 2026-11-22 14:19:04
+Trip Ending Time: 2026-11-22 14:20:09
+
+Trip Starting Time: 2026-11-22 14:36:09
+Seat 1 | Amount 35 | Success
+Seat 2 | Amount 10 | Success
+Trip Ending Time: 2026-11-22 14:37:08
+
+Trip Starting Time: 2026-11-22 14:40:17
+Seat 1 | Amount 45 | Success
+Trip Ending Time: 2026-11-22 14:41:29
+
+Trip Starting Time: 2026-11-22 14:49:36
+Trip Ending Time: 2026-11-22 14:49:42
+
+Trip Starting Time: 2026-11-22 14:50:02
+Seat 1 | Amount 35 | Success
+Seat 2 | Amount 45 | Success
+Seat 3 | Amount 20 | Success
+Seat 4 | Amount 35 | Success
+Seat 5 | Amount 40 | Success
+Seat 5 | Amount 10 | Success
+Trip Ending Time: 2026-11-22 14:55:36
+
