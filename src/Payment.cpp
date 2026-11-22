@@ -1,4 +1,5 @@
 #include "Payment.h"
+#include <new>
 
 bool Payment::isValidCard(std::string card){
     size_t length = card.size();
@@ -15,46 +16,53 @@ bool Payment::isValidCard(std::string card){
 
 void Payment::addTransaction(transaction **front, transaction **rear, int seatno, int f){
     transaction *temp = NULL;
-    temp = (transaction*) malloc(sizeof(transaction));
+    temp = new(std::nothrow) transaction;
     if(temp != NULL){
         count++;
         temp->fare = f;
         temp->seatnumber = seatno;
         temp->status = "SUCCESS";
+        temp->next = NULL;
         if((*front) == NULL && (*rear) == NULL){
             (*front) = (*rear) = temp;
         } else {
             (*rear)->next = temp;
             (*rear) = temp;
         }
-        (*rear)->next = NULL;
+    }else {
+        std::cout << "Memory Allocation Failed\n";
     }
 }
 
-void Payment::removeTransaction(transaction **front, transaction **rear, int seatno){
-    if((*front)->seatnumber == seatno){
-        (*front) = (*front)->next;
-    } else {
-        transaction *temp = NULL, *del = NULL;
-        temp = (transaction*) malloc(sizeof(transaction));
-        del = (transaction*) malloc(sizeof(transaction));
-        if(temp != NULL) {
-            temp = (*front);
-            while(temp->next->seatnumber != seatno){
-                temp = temp->next;
-            }
-            del = temp->next;
-            temp->next = temp->next->next;
-            free(del);
-        }
+
+void Payment::removeTransaction(transaction **front, transaction **rear, int seatno) {
+    if(*front == NULL) {
+        std::cout << "No transactions to remove.\n";
+        return;
     }
+    transaction *temp = *front;
+    transaction *prev = NULL;
+    while(temp != NULL && temp->seatnumber != seatno) {
+        prev = temp;
+        temp = temp->next;
+    }
+    if(prev == NULL) {
+        *front = temp->next;
+    } else {
+        prev->next = temp->next;
+    }
+    if(temp == *rear) {
+        *rear = prev;
+    }
+
+    delete temp;
+    count--;
 }
+
 
 void Payment::displayTransaction(){
     std::cout << "Queued Transactions: " << count <<std::endl;
-    transaction *temp = NULL;
-    temp = (transaction*) malloc(sizeof(transaction));
-    temp = front;
+    transaction *temp = front;
     while(temp != NULL){
         std::cout << "Seat " << temp->seatnumber << " | Amount " << temp->fare << " | " << temp->status <<std::endl;
         temp = temp->next;
