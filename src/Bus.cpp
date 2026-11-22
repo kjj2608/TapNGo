@@ -53,6 +53,11 @@ bool Bus::isoccupied(int seatno){
     return ( seats[seatno] != 0 );
 }
 
+bool Bus::isPaid(int seatno){
+    seatno--;
+    return ( seats[seatno] == 2 );
+}
+
 int Bus::getStatus(int seatno){
     seatno--;
     return (seats[seatno]);
