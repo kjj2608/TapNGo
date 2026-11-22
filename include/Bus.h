@@ -39,6 +39,7 @@ class Bus {
         bool markVerified(int seatNumber);
         bool releaseSeat(int seatNumber, Payment& payment);
         bool isoccupied(int seatNumber);
+        bool isPaid(int seatNumber);
         int getStatus(int seatNumber);
         void setFare(int seatNumber, int start, int stop);
         int getFare(int seatNumber){
